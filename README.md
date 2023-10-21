@@ -1,6 +1,6 @@
 # Smooth Image Zoom
 
-### Zoom image with smooth animation
+### Demo
 
 https://github.com/violence-ai/smooth-image-zoom/assets/51386157/e5bfa895-e3ca-425b-a08c-e25d4e154734
 
