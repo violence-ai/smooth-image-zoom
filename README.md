@@ -2,7 +2,7 @@
 
 ### Zoom image with smooth animation
 
-https://github.com/violence-ai/smooth-image-zoom/assets/51386157/089e451f-8470-4467-89e6-9adc79a5302e
+https://github.com/violence-ai/smooth-image-zoom/assets/51386157/e5bfa895-e3ca-425b-a08c-e25d4e154734
 
 <hr>
 
