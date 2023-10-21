@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example</title>
+    <script src="../dist/index.js"></script>
+</head>
+<body>
+
+<style>
+
+    body {
+        margin: 0;
+        background: #000;
+    }
+
+    .images {
+        display: flex;
+        align-items: flex-start;
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+
+    .image {
+        width: 200px;
+        margin-right: 20px;
+        cursor: pointer;
+    }
+
+</style>
+
+<script>
+
+    new SmoothZoom().init()
+
+</script>
+
+<div class="images">
+    <img class="image" zoom src="./img/1.jpg">
+    <img class="image" zoom src="./img/2.jpeg">
+    <img class="image" zoom src="./img/3.jpg">
+</div>
+
+
+</body>
+</html>
