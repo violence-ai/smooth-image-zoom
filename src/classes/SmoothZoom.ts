@@ -58,7 +58,7 @@ export default class SmoothZoom {
                     this.open(e.target)
                 }
             })
-        });
+        })
     }
 
     private createRootElement(): HTMLElement {
@@ -103,7 +103,7 @@ export default class SmoothZoom {
         "click".split(" ").forEach((e) => {
             this.elOverlay.addEventListener(e, this.close.bind(this))
             this.image.addEventListener(e, this.close.bind(this))
-        });
+        })
 
         // дождемся рендера
         requestAnimationFrame(() => {
@@ -140,7 +140,7 @@ export default class SmoothZoom {
         const values: number[] = []
         const transition: string[] = img.style.transition.split(',')
         transition.forEach(item => {
-            if (/^ *(all|width|height|top|left)/.test(item)) {
+            if (/^ *(all|width|height|top|left)?/.test(item)) {
                 const m = /(\d+)ms/.exec(item)
                 const m2 = /(\d+(\.\d+)?)s/.exec(item)
                 if (m && m[1]) {
