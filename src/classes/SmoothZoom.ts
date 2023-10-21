@@ -52,12 +52,10 @@ export default class SmoothZoom {
     // инициализация (при старте страницы)
     public init() {
         // присвоить всем тегам <img> имеющим атрибут 'zoom' обработчик зума при клике
-        "click".split(" ").forEach((e) => {
-            document.addEventListener(e, (e) => {
-                if ( e.target instanceof HTMLImageElement && e.target.tagName === 'IMG' && e.target.hasAttribute('zoom') ) {
-                    this.open(e.target)
-                }
-            })
+        document.addEventListener("click", (e) => {
+            if ( e.target instanceof HTMLImageElement && e.target.tagName === 'IMG' && e.target.hasAttribute('zoom') ) {
+                this.open(e.target)
+            }
         })
     }
 
@@ -100,10 +98,8 @@ export default class SmoothZoom {
         this.root.appendChild(this.image)
 
         // создадим события сворачивающие зумированную картинку
-        "click".split(" ").forEach((e) => {
-            this.elOverlay.addEventListener(e, this.close.bind(this))
-            this.image.addEventListener(e, this.close.bind(this))
-        })
+        this.elOverlay.addEventListener("click", this.close.bind(this))
+        this.image.addEventListener("click", this.close.bind(this))
 
         // дождемся рендера
         requestAnimationFrame(() => {
