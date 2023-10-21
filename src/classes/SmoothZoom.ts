@@ -1,13 +1,13 @@
 import {Options, OptionsRequired} from "../types/Options";
 import {setCSSStyles} from "../functions/setCSSStyles";
 import {styles} from "../options/styles";
-import calc from "../functions/calc";
 import pause from "../functions/pause";
 
 export default class SmoothZoom {
 
     static defaultOptions: OptionsRequired = {
         styles: styles,
+        maxSizePercent: 100,
     }
 
     private readonly root: HTMLElement
@@ -52,7 +52,7 @@ export default class SmoothZoom {
     // инициализация (при старте страницы)
     public init() {
         // присвоить всем тегам <img> имеющим атрибут 'zoom' обработчик зума при клике
-        "click touchstart".split(" ").forEach((e) => {
+        "click".split(" ").forEach((e) => {
             document.addEventListener(e, (e) => {
                 if ( e.target instanceof HTMLImageElement && e.target.tagName === 'IMG' && e.target.hasAttribute('zoom') ) {
                     this.open(e.target)
@@ -100,8 +100,10 @@ export default class SmoothZoom {
         this.root.appendChild(this.image)
 
         // создадим события сворачивающие зумированную картинку
-        this.elOverlay.addEventListener('click', this.close.bind(this))
-        this.image.addEventListener('click', this.close.bind(this))
+        "click".split(" ").forEach((e) => {
+            this.elOverlay.addEventListener(e, this.close.bind(this))
+            this.image.addEventListener(e, this.close.bind(this))
+        });
 
         // дождемся рендера
         requestAnimationFrame(() => {
@@ -165,27 +167,39 @@ export default class SmoothZoom {
 
         const windowW = window.innerWidth
         const windowH = window.innerHeight
-
         const naturalWidth = this.image.naturalWidth
         const naturalHeight = this.image.naturalHeight
 
-        let imgW, imgH
+        // если ширина натуральной картинки больше высоты, то оттаклвиаемся от ширины, иначе от высоты
+        const basedOnWidth = naturalWidth > naturalHeight
 
-        if ( naturalHeight > naturalWidth ) {
-            const { sizeA, sizeB } = calc(windowH, 80, naturalHeight, naturalWidth)
-            imgH = sizeA
-            imgW = sizeB
-        } else {
-            const { sizeA, sizeB } = calc(windowH, 80, naturalWidth, naturalHeight)
-            imgW = sizeA
-            imgH = sizeB
-        }
+        // получаем размер ведущей стороны окна
+        const windowSizeSize = basedOnWidth ? windowW : windowH
 
-        const top = (windowH - imgH) / 2
-        const left = (windowW - imgW) / 2
+        // определяем какая сторона (ширина/высота) является ведущей
+        // "А" - ведущая сторона
+        const a = basedOnWidth ? naturalWidth : naturalHeight
+        const b = basedOnWidth ? naturalHeight : naturalWidth
 
-        this.image.style.width = `${imgW}px`
-        this.image.style.height = `${imgH}px`
+        // определим максимальный размер ведущей стороны (по проценту)
+        const maxSize = Math.floor((windowSizeSize / 100) * this.getOptions().maxSizePercent)
+
+        // ограничим максимальный размер ведущей стороны, если он превышает допустимый максимум
+        const aSize = a > maxSize ? maxSize : a
+
+        // сторону B подгоняем автоматически (уменьшаем размер пропорционально в процентах)
+        const cutPx = a > aSize ? a - aSize : 0
+        const cutPxInPercent = cutPx / (a / 100)
+        const bSize = b - ((b / 100) * cutPxInPercent)
+
+        const w = aSize
+        const h = bSize
+
+        const top = (windowH - h) / 2
+        const left = (windowW - w) / 2
+
+        this.image.style.width = `${w}px`
+        this.image.style.height = `${h}px`
         this.image.style.top = `${top}px`
         this.image.style.left = `${left}px`
     }
@@ -193,6 +207,7 @@ export default class SmoothZoom {
     public getOptions(): OptionsRequired {
         return {
             styles: this.options?.styles ?? SmoothZoom.defaultOptions.styles,
+            maxSizePercent: this.options?.maxSizePercent ?? SmoothZoom.defaultOptions.maxSizePercent,
         }
     }
 }

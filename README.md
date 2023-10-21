@@ -60,6 +60,8 @@ const options = {
         transition: '500ms ease-in-out',
       },
     },
+    // 
+    maxSizePercent: 80,
 }
 
 SmoothZoom().init(options)
