@@ -2,7 +2,6 @@
 
 ### Zoom image with smooth animation
 
-https://user-images.githubusercontent.com/51386157/184543160-135b64b7-846d-42ab-86c8-042c574f300f.mp4
 
 <hr>
 
