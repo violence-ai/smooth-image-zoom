@@ -64,10 +64,8 @@ export default class SmoothZoom {
         const el = document.createElement('div')
         // задаем стили базовому root-контейнеру
         setCSSStyles(el, this.getOptions().styles.root)
-        document.addEventListener('DOMContentLoaded', () => {
-            // после загрузки страницы добавим root-элемент на страницу в body
-            document.body.prepend(el)
-        })
+        // добавим root-элемент на страницу в body
+        document.body.prepend(el)
         return el
     }
 
