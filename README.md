@@ -9,14 +9,18 @@ https://github.com/violence-ai/smooth-image-zoom/assets/51386157/e5bfa895-e3ca-4
 # Import to your project
 
 ```typescript
-import SmoothZoom from "smooth-image-zoom"
+import SmoothZoomImage from "smooth-image-zoom"
 ```
 
 # Usage
 
 ```typescript
 // Initialize
-new SmoothZoom().init()
+const smoothZoomImage = new SmoothZoomImage()
+smoothZoomImage.init()
+
+// Destroy (be sure to use it when unmounting in React components and the like)
+smoothZoomImage.destroy()
 ```
 
 ```html
