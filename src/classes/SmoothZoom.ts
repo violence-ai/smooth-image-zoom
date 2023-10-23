@@ -51,9 +51,9 @@ export default class SmoothZoom {
 
     // инициализация (при старте страницы)
     public init() {
-        // присвоить всем тегам <img> имеющим атрибут 'zoom' обработчик зума при клике
+        // присвоить обработчик зума при клике всем тегам <img> имеющим class 'smooth-image-zoom'
         document.addEventListener("click", (e) => {
-            if ( e.target instanceof HTMLImageElement && e.target.tagName === 'IMG' && e.target.hasAttribute('zoom') ) {
+            if ( e.target instanceof HTMLImageElement && e.target.tagName === 'IMG' && e.target.classList.contains('smooth-image-zoom') ) {
                 this.open(e.target)
             }
         })

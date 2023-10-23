@@ -20,8 +20,8 @@ new SmoothZoom().init()
 ```
 
 ```html
-<!-- Add the "zoom" attribute to all images that should increase when clicked -->
-<img class="image" src="/image_url" zoom>
+<!-- Add the "smooth-image-zoom" class to all images that should increase when clicked -->
+<img class="image smooth-image-zoom" src="/image_url">
 ```
 
 # Options
