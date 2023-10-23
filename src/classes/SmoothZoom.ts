@@ -53,12 +53,12 @@ export default class SmoothZoom {
     // инициализация (при старте страницы)
     public init() {
         // присвоить обработчик зума при клике всем тегам <img> имеющим class 'smooth-image-zoom'
-        document.addEventListener("click", this.open)
+        document.addEventListener("click", this.open.bind(this))
     }
 
     public destroy() {
         this.root.remove()
-        document.removeEventListener("click", this.open)
+        document.removeEventListener("click", this.open.bind(this))
     }
 
     private createRootElement(): HTMLElement {
