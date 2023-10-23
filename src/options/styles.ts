@@ -3,6 +3,7 @@ import {Styles} from "../types/Styles";
 export const styles: Styles = {
     root: {
         position: 'fixed',
+        zIndex: '999999999',
     },
 
     overlay: {
@@ -12,7 +13,7 @@ export const styles: Styles = {
         left: '0',
         width: '100%',
         height: '100%',
-        zIndex: '9999',
+        zIndex: '1',
         transition: '500ms ease',
     },
 
@@ -26,7 +27,7 @@ export const styles: Styles = {
 
     img: {
         position: 'fixed',
-        zIndex: '10000',
+        zIndex: '2',
         transition: '500ms ease-in-out',
     },
 }

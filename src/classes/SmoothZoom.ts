@@ -16,6 +16,7 @@ export default class SmoothZoom {
     private _originalImage: HTMLImageElement | undefined
     private _elOverlay: HTMLElement | undefined
     private _image: HTMLImageElement | undefined
+    private documentClick: EventListener | undefined
 
     get originalImage() {
         if (!this._originalImage) throw Error('Original image not found')
@@ -52,11 +53,12 @@ export default class SmoothZoom {
     // инициализация (при старте страницы)
     public init() {
         // присвоить обработчик зума при клике всем тегам <img> имеющим class 'smooth-image-zoom'
-        document.addEventListener("click", (e) => {
-            if ( e.target instanceof HTMLImageElement && e.target.tagName === 'IMG' && e.target.classList.contains('smooth-image-zoom') ) {
-                this.open(e.target)
-            }
-        })
+        document.addEventListener("click", this.open)
+    }
+
+    public destroy() {
+        this.root.remove()
+        document.removeEventListener("click", this.open)
     }
 
     private createRootElement(): HTMLElement {
@@ -70,7 +72,13 @@ export default class SmoothZoom {
     }
 
     // клик по картинке
-    private open(img: HTMLImageElement) {
+    private open(e: Event) {
+        let img: HTMLImageElement
+        if ( !(e.target instanceof HTMLImageElement && e.target.tagName === 'IMG' && e.target.classList.contains('smooth-image-zoom')) ) {
+            return
+        }
+        img = e.target
+
         // сохраним ссылку на оригинальную картинку
         this.originalImage = img
 
