@@ -35,9 +35,11 @@ smoothZoomImage.destroy()
 const defaultStyles = SmoothZoom.defaultOptions
 
 const options = {
+    // Default styles
     styles: {
       root: {
         position: 'fixed',
+        zIndex: '999999999',
       },
 
       overlay: {
@@ -47,7 +49,7 @@ const options = {
         left: '0',
         width: '100%',
         height: '100%',
-        zIndex: '9999',
+        zIndex: '1',
         transition: '500ms ease',
       },
 
@@ -61,12 +63,15 @@ const options = {
 
       img: {
         position: 'fixed',
-        zIndex: '10000',
+        zIndex: '2',
         transition: '500ms ease-in-out',
       },
     },
-    // 
-    maxSizePercent: 80,
+    // The maximum size of the fill in the browser window as a percentage
+    // Default: 100 - will stretch to the window frames
+    // Note: The image will not stretch 100% to the browser frame if the size of the original resolution is smaller than the browser window.
+    // This is done so that the image quality does not deteriorate and looks aesthetically pleasing
+    maxSizePercent: 100,
 }
 
 SmoothZoom().init(options)
