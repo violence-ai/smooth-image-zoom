@@ -176,30 +176,34 @@ export default class SmoothZoom {
         const basedOnWidth = naturalWidth > naturalHeight
 
         // получаем размер ведущей стороны окна
-        const windowSizeSize = basedOnWidth ? windowW : windowH
+        const leadingWindowSize = basedOnWidth ? windowW : windowH
 
-        // определяем какая сторона (ширина/высота) является ведущей
+        // определяем размер стороны (ширина или высота)
         // "А" - ведущая сторона
+        // "B" - второстепенная сторона
         const a = basedOnWidth ? naturalWidth : naturalHeight
         const b = basedOnWidth ? naturalHeight : naturalWidth
 
         // определим максимальный размер ведущей стороны (по проценту)
-        const maxSize = Math.floor((windowSizeSize / 100) * this.getOptions().maxSizePercent)
+        const maxLeadingSize = Math.floor((leadingWindowSize / 100) * this.getOptions().maxSizePercent)
 
         // ограничим максимальный размер ведущей стороны, если он превышает допустимый максимум
-        const aSize = a > maxSize ? maxSize : a
+        const aSize = a > maxLeadingSize ? maxLeadingSize : a
 
         // сторону B подгоняем автоматически (уменьшаем размер пропорционально в процентах)
         const cutPx = a > aSize ? a - aSize : 0
         const cutPxInPercent = cutPx / (a / 100)
         const bSize = b - ((b / 100) * cutPxInPercent)
 
-        const w = aSize
-        const h = bSize
+        // теперь в звисимости от ведущей сторон назначем ее высоте либо ширине
+        const w = basedOnWidth ? aSize : bSize
+        const h = basedOnWidth ? bSize : aSize
 
+        // определяем позицию
         const top = (windowH - h) / 2
         const left = (windowW - w) / 2
 
+        // задаем значения
         this.image.style.width = `${w}px`
         this.image.style.height = `${h}px`
         this.image.style.top = `${top}px`
