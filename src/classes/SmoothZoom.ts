@@ -169,45 +169,71 @@ export default class SmoothZoom {
 
         const windowW = window.innerWidth
         const windowH = window.innerHeight
+
         const naturalWidth = this.image.naturalWidth
         const naturalHeight = this.image.naturalHeight
 
+        let data = this.calculate(windowW, windowH, naturalWidth, naturalHeight)
+
+        // если какая-то из велечин превышает допустимые разремы стороны окна
+        if (data.w > windowW || data.h > windowH) {
+            // делаем повторную калькуляцию
+            // отправляем новые разремы картинки, которые мы рассчитали выше (с автоматическим определением оптимальной стороны)
+            // инвертируем полученный basedOnWidth - чтобы изменить ведущую сторону от которой будем отталкиваться в расчетах
+            data = this.calculate(windowW, windowH, data.w, data.h, !data.basedOnWidth)
+        }
+
+        // задаем значения
+        this.image.style.width = `${data.w}px`
+        this.image.style.height = `${data.h}px`
+        this.image.style.top = `${data.top}px`
+        this.image.style.left = `${data.left}px`
+    }
+
+    private calculate(windowW: number, windowH: number, naturalWidth: number, naturalHeight: number, _basedOnWidth?: boolean) {
+        console.log('windows size', windowW, windowH)
+        console.log('natural image size', naturalWidth, naturalHeight)
         // если ширина натуральной картинки больше высоты, то оттаклвиаемся от ширины, иначе от высоты
-        const basedOnWidth = naturalWidth > naturalHeight
+        const basedOnWidth = _basedOnWidth !== undefined ? _basedOnWidth : naturalWidth > naturalHeight
+        console.log('basedOnWidth', basedOnWidth)
 
         // получаем размер ведущей стороны окна
         const leadingWindowSize = basedOnWidth ? windowW : windowH
+        console.log('leadingWindowSize', leadingWindowSize)
 
         // определяем размер стороны (ширина или высота)
         // "А" - ведущая сторона
         // "B" - второстепенная сторона
         const a = basedOnWidth ? naturalWidth : naturalHeight
         const b = basedOnWidth ? naturalHeight : naturalWidth
+        console.log('a, b', a, b)
 
         // определим максимальный размер ведущей стороны (по проценту)
         const maxLeadingSize = Math.floor((leadingWindowSize / 100) * this.getOptions().maxSizePercent)
+        console.log('maxLeadingSize', maxLeadingSize)
 
         // ограничим максимальный размер ведущей стороны, если он превышает допустимый максимум
         const aSize = a > maxLeadingSize ? maxLeadingSize : a
+        console.log('aSize', aSize)
 
         // сторону B подгоняем автоматически (уменьшаем размер пропорционально в процентах)
         const cutPx = a > aSize ? a - aSize : 0
+        console.log('cutPx', cutPx)
         const cutPxInPercent = cutPx / (a / 100)
+        console.log('cutPxInPercent', cutPxInPercent)
         const bSize = b - ((b / 100) * cutPxInPercent)
+        console.log('bSize', bSize)
 
         // теперь в звисимости от ведущей сторон назначем ее высоте либо ширине
         const w = basedOnWidth ? aSize : bSize
         const h = basedOnWidth ? bSize : aSize
+        console.log('w, h', w, h)
 
         // определяем позицию
         const top = (windowH - h) / 2
         const left = (windowW - w) / 2
 
-        // задаем значения
-        this.image.style.width = `${w}px`
-        this.image.style.height = `${h}px`
-        this.image.style.top = `${top}px`
-        this.image.style.left = `${left}px`
+        return { w, h, top, left, basedOnWidth }
     }
 
     public getOptions(): OptionsRequired {
